@@ -5,8 +5,6 @@
     display: block;
     box-sizing: border-box;
     z-index: var(pickie-z-index);
-
-
   }
 </style>
 
@@ -14,6 +12,7 @@
   <div class="pickie-date-picker" :style="baseStyles">
 
     <Pickie
+      :date="date"
       :isWindowOpen="isWindowOpen"
       :position="position"
       :date-format="dateFormat"
@@ -28,7 +27,7 @@
       @toggleWindow="handleToggleWindow">
 
       <input
-        v-model="date"
+        v-model="formattedDate"
         type="text"
         ref="field"
         name="pickie-date-picker"
@@ -42,6 +41,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Pickie from './components/Pickie.vue';
+import {format} from 'date-fns';
 
 @Component({
   components: {
@@ -50,6 +50,7 @@ import Pickie from './components/Pickie.vue';
 })
 
 export default class App extends Vue {
+  @Prop(String) public startDate!: string;
   @Prop({type: String, default: 'bottom'}) public position!: string; // top, right, bottom, left, float
   @Prop({type: String, default: 'YYYY-mm-DD'}) public dateFormat!: string;
   @Prop({type: Boolean, default: true}) public allowPast!: boolean;
@@ -60,7 +61,11 @@ export default class App extends Vue {
   @Prop({type: Number, default: 9999}) public zIndex!: string;
 
   public isWindowOpen: boolean = false;
-  public date: string = '';
+  public date: Date = new Date();
+
+  public get formattedDate(): string {
+    return format(this.date, this.dateFormat);
+  }
 
   public get baseStyles(): object {
     return {
@@ -68,7 +73,7 @@ export default class App extends Vue {
     };
   }
 
-  public handleSetDate($event, value: string): void {
+  public handleSetDate($event, value: Date): void {
     this.date = value;
   }
 
@@ -80,5 +85,12 @@ export default class App extends Vue {
     }
     this.isWindowOpen = value;
   }
+
+  public mounted(): void {
+    if (this.startDate && new Date(this.startDate)) {
+      this.date = new Date(this.startDate);
+    }
+  }
+
 }
 </script>

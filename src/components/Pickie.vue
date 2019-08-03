@@ -147,7 +147,6 @@ import FullDate from './FullDate.vue';
 import Day from './Day.vue';
 import Month from './Month.vue';
 import Year from './Year.vue';
-import {format} from 'date-fns';
 import Tether from 'tether';
 
 @Component({
@@ -160,6 +159,7 @@ import Tether from 'tether';
 })
 
 export default class Pickie extends Vue {
+  @Prop(Date) public date!: Date;
   @Prop(Boolean) public isWindowOpen!: boolean;
   @Prop(String) public position!: string;
   @Prop(String) public dateFormat!: string;
@@ -171,11 +171,6 @@ export default class Pickie extends Vue {
   @Prop(Number) public zIndex!: string;
 
   public picker: string = 'full';
-  public date: Date = new Date();
-
-  public get formattedDate(): string {
-    return format(this.date, this.dateFormat);
-  }
 
   public get baseClass(): string {
     return `pickie-window pickie-window-${this.position}`;
@@ -192,8 +187,7 @@ export default class Pickie extends Vue {
   }
 
   public handleSetDate($event, value: Date): void {
-    this.date = value;
-    this.$emit('dateChange', format(value, this.dateFormat));
+    this.$emit('dateChange', value);
   }
 
   public handleToggleWindow($event, value: boolean | undefined): void {
@@ -201,7 +195,6 @@ export default class Pickie extends Vue {
   }
 
   public mounted(): void {
-    this.$emit('dateChange', this.formattedDate);
     if (this.position !== 'float') {
       new Tether({
         element: '.pickie-window',
