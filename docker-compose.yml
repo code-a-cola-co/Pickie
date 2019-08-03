@@ -1,0 +1,27 @@
+version: '3.5'
+services:
+
+  redis:
+    image: redis:alpine
+    logging:
+      driver: none
+    ports:
+      - '6379:6379'
+
+  mongo:
+    image: mongo:jessie
+    logging:
+      driver: none
+    ports:
+      - '27017:27017'
+
+  socketio:
+    image: voduytuan/docker-socketio
+    logging:
+      driver: none
+    depends_on:
+      - redis
+    links:
+      - redis
+    ports:
+      - "3000:3000"
