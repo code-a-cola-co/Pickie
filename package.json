@@ -20,7 +20,7 @@
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-pwa": "^3.10.0",
     "@vue/cli-plugin-typescript": "^3.10.0",
-    "@vue/cli-service": "^3.10.0",
+    "@vue/cli-service": "^5.0.8",
     "babel-core": "^6.26.3",
     "css-loader": "^1.0.1",
     "node-sass": "^4.12.0",
